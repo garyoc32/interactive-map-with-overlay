@@ -1,4 +1,3 @@
-/* eslint import/no-webpack-loader-syntax: off */
 import React, {useEffect, useRef, useState} from 'react';
 import { createRoot } from 'react-dom/client';
 import { useJsApiLoader } from '@react-google-maps/api';
@@ -14,6 +13,7 @@ function InteractiveMap(props) {
         mapLegend,
     } = props;
 
+    // Await response from google maps API to run application
     const { isLoaded } = useJsApiLoader({
         googleMapsApiKey: apiKey,
         version: '3',
@@ -34,6 +34,7 @@ function InteractiveMap(props) {
     );
 }
 
+//Query Dom for presence of component and pass props
 const domContainer = document.querySelector('#interactive-map');
 const jsonData = domContainer.dataset.interactiveMap;
 let props = {};

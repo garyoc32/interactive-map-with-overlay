@@ -6,8 +6,8 @@ import { ReactSVG } from 'react-svg';
 import isResponsive from '../utilities/isResponsive';
 import { MAP_STYLES } from './styles';
 // /*global google*/
-/* eslint-disable no-undef */
 
+//Default local center for map
 const initialCenter = { lat: -37.78251810679187, lng: 144.91149626942436};
 
 function Map(props) {
@@ -19,6 +19,7 @@ function Map(props) {
         mapID,
     } = props;
 
+    // Setup state
     const [infoDomReady, setInfoDomReady] = useState(false);
     const [mapCenter, setMapCenter] = useState(initialCenter);
     const [instance, setInstance] = useState(null);
@@ -34,6 +35,9 @@ function Map(props) {
         setIsMounted(true), 
     []);
 
+    // The Maps API package includes a method that runs on a successful render
+    // For the best user experience I have setup various functions to do things such as create fallback settings in the event webGL is not supported in the browser
+    // Or to handle visibility, sizing or to rearrange elements in the dom.
     const onLoad = React.useCallback(
         function onLoad(map) {
             setInstance(map);
@@ -86,6 +90,7 @@ function Map(props) {
         }
     }
 
+    // 
     function checkWebGLSupport(map) {
         if (map && map.getRenderingType() == 'RASTER') {
             setRasterMap(true);
@@ -97,6 +102,8 @@ function Map(props) {
         return result;
     }
 
+    // As this map does not actually accord to NSEW bearing (because the client wanted the overlay to not be crooked)
+    // I created this idele function to always reset the tilt and bearing of the map when the user is no longer interacting
     const onIdle = React.useCallback(
         function onIdle() {
             if (instance) {
@@ -111,6 +118,9 @@ function Map(props) {
         width: window.innerWidth,
         height: window.innerHeight,
     }
+
+
+    // Handy unit test
 
     // const onClick = React.useCallback(
     //     function onClick(e) {
